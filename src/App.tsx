@@ -3,7 +3,17 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import { AccessibilityProvider } from "@/components/AccessibilityProvider";
+import { Layout } from "@/components/Layout";
+
+// Pages
+import { Home } from "./pages/Home";
+import { Sobre } from "./pages/Sobre";
+import { FAQ } from "./pages/FAQ";
+import { Tutorial } from "./pages/Tutorial";
+import { Simulador } from "./pages/Simulador";
+import { ComoFunciona } from "./pages/ComoFunciona";
+import { LoginProfissional } from "./pages/LoginProfissional";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -11,15 +21,25 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AccessibilityProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/como-funciona" element={<ComoFunciona />} />
+              <Route path="/sobre" element={<Sobre />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/tutorial" element={<Tutorial />} />
+              <Route path="/simulador" element={<Simulador />} />
+              <Route path="/login-profissional" element={<LoginProfissional />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Layout>
+        </BrowserRouter>
+      </AccessibilityProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
