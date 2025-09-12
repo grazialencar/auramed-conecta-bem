@@ -27,8 +27,8 @@ export const LoginProfissional: React.FC = () => {
     // Simulate login process
     setTimeout(() => {
       setIsLoading(false);
-      // This would typically redirect to the professional dashboard
-      alert('Funcionalidade de login em desenvolvimento. Em breve você poderá acessar o sistema completo!');
+      // Redirect to dashboard demo
+      window.location.href = '/dashboard-profissional';
     }, 2000);
   };
 

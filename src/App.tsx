@@ -14,6 +14,7 @@ import { Tutorial } from "./pages/Tutorial";
 import { Simulador } from "./pages/Simulador";
 import { ComoFunciona } from "./pages/ComoFunciona";
 import { LoginProfissional } from "./pages/LoginProfissional";
+import { DashboardProfissional } from "./pages/DashboardProfissional";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
               <Route path="/tutorial" element={<Tutorial />} />
               <Route path="/simulador" element={<Simulador />} />
               <Route path="/login-profissional" element={<LoginProfissional />} />
+              <Route path="/dashboard-profissional" element={<DashboardProfissional />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
