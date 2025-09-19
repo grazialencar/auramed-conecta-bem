@@ -33,7 +33,7 @@ export const AccessibilityMenu: React.FC = () => {
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div className="fixed top-4 left-4 md:top-4 md:right-4 z-50">
       <Button
         onClick={() => setIsOpen(!isOpen)}
         variant="outline"
@@ -47,7 +47,7 @@ export const AccessibilityMenu: React.FC = () => {
       </Button>
 
       {isOpen && (
-        <Card className="absolute top-full right-0 mt-2 w-80 shadow-xl border-2">
+        <Card className="absolute top-full left-0 md:right-0 md:left-auto mt-2 w-80 shadow-xl border-2">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg font-semibold">
