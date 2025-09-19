@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { User } from 'lucide-react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { User, Menu, X } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -74,9 +76,86 @@ export const Header: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Professional Access */}
+          {/* Professional Access & Mobile Menu */}
           <div className="flex items-center gap-3">
-            <Link to="/login-profissional">
+            {/* Mobile Hamburger Menu */}
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="md:hidden text-accessible"
+                  aria-label="Abrir menu de navegação"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-80 bg-background">
+                <div className="flex flex-col space-y-4 mt-8">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-lg font-semibold text-foreground">Menu</h2>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setMobileMenuOpen(false)}
+                      aria-label="Fechar menu"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  
+                  <nav className="flex flex-col space-y-2" role="navigation" aria-label="Navegação móvel">
+                    <Link to="/" onClick={() => setMobileMenuOpen(false)}>
+                      <Button 
+                        variant={isActive('/') ? 'default' : 'ghost'}
+                        className="w-full justify-start text-accessible font-medium"
+                      >
+                        Início
+                      </Button>
+                    </Link>
+                    <Link to="/como-funciona" onClick={() => setMobileMenuOpen(false)}>
+                      <Button 
+                        variant={isActive('/como-funciona') ? 'default' : 'ghost'}
+                        className="w-full justify-start text-accessible font-medium"
+                      >
+                        Como Funciona
+                      </Button>
+                    </Link>
+                    <Link to="/sobre" onClick={() => setMobileMenuOpen(false)}>
+                      <Button 
+                        variant={isActive('/sobre') ? 'default' : 'ghost'}
+                        className="w-full justify-start text-accessible font-medium"
+                      >
+                        Sobre o Projeto
+                      </Button>
+                    </Link>
+                    <Link to="/faq" onClick={() => setMobileMenuOpen(false)}>
+                      <Button 
+                        variant={isActive('/faq') ? 'default' : 'ghost'}
+                        className="w-full justify-start text-accessible font-medium"
+                      >
+                        Dúvidas (FAQ)
+                      </Button>
+                    </Link>
+                    
+                    <div className="border-t pt-4 mt-6">
+                      <Link to="/login-profissional" onClick={() => setMobileMenuOpen(false)}>
+                        <Button 
+                          variant="outline" 
+                          className="w-full justify-start text-accessible font-medium bg-card hover:bg-muted border-2"
+                        >
+                          <User className="h-4 w-4 mr-2" aria-hidden="true" />
+                          Área do Profissional
+                        </Button>
+                      </Link>
+                    </div>
+                  </nav>
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            {/* Desktop Professional Access */}
+            <Link to="/login-profissional" className="hidden md:block">
               <Button 
                 variant="outline" 
                 className="text-accessible font-medium bg-card hover:bg-muted border-2"
@@ -88,48 +167,6 @@ export const Header: React.FC = () => {
             </Link>
           </div>
         </div>
-
-        {/* Mobile Navigation */}
-        <nav className="md:hidden mt-4 border-t pt-4" role="navigation" aria-label="Navegação móvel">
-          <div className="grid grid-cols-2 gap-2">
-            <Link to="/">
-              <Button 
-                variant={isActive('/') ? 'default' : 'ghost'}
-                className="w-full text-accessible font-medium"
-                size="sm"
-              >
-                Início
-              </Button>
-            </Link>
-            <Link to="/como-funciona">
-              <Button 
-                variant={isActive('/como-funciona') ? 'default' : 'ghost'}
-                className="w-full text-accessible font-medium"
-                size="sm"
-              >
-                Como Funciona
-              </Button>
-            </Link>
-            <Link to="/sobre">
-              <Button 
-                variant={isActive('/sobre') ? 'default' : 'ghost'}
-                className="w-full text-accessible font-medium"
-                size="sm"
-              >
-                Sobre
-              </Button>
-            </Link>
-            <Link to="/faq">
-              <Button 
-                variant={isActive('/faq') ? 'default' : 'ghost'}
-                className="w-full text-accessible font-medium"
-                size="sm"
-              >
-                FAQ
-              </Button>
-            </Link>
-          </div>
-        </nav>
       </div>
     </header>
   );
