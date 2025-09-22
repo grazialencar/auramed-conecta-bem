@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
@@ -95,7 +96,17 @@ export const DashboardProfissional: React.FC = () => {
     email: '',
     birthDate: '',
     address: '',
-    observations: ''
+    observations: '',
+    visionDifficulty: '',
+    usesGlasses: '',
+    hearingDifficulty: '',
+    usesHearingAid: '',
+    cognitiveDifficulty: '',
+    digitalSkills: '',
+    reminderChannel: '',
+    needsCaregiver: '',
+    previousTelehealth: '',
+    accessibilityNeeds: ''
   });
 
   const getStatusBadge = (status: string) => {
@@ -319,6 +330,197 @@ export const DashboardProfissional: React.FC = () => {
                       onChange={(e) => setNewPatient({...newPatient, observations: e.target.value})}
                       rows={4}
                     />
+                  </div>
+
+                  {/* Seção de Acessibilidade e Necessidades Especiais */}
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-semibold mb-4">Acessibilidade e Necessidades Especiais</h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Dificuldades de visão */}
+                      <div className="space-y-3">
+                        <Label>Dificuldades de visão?</Label>
+                        <RadioGroup 
+                          value={newPatient.visionDifficulty || ""}
+                          onValueChange={(value) => setNewPatient({...newPatient, visionDifficulty: value})}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="sim" id="vision-yes" />
+                            <Label htmlFor="vision-yes">Sim</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="não" id="vision-no" />
+                            <Label htmlFor="vision-no">Não</Label>
+                          </div>
+                        </RadioGroup>
+                        {newPatient.visionDifficulty === "sim" && (
+                          <div className="ml-6 space-y-2">
+                            <Label>Usa óculos/lentes?</Label>
+                            <RadioGroup 
+                              value={newPatient.usesGlasses || ""}
+                              onValueChange={(value) => setNewPatient({...newPatient, usesGlasses: value})}
+                            >
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="glasses-yes" />
+                                <Label htmlFor="glasses-yes">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="não" id="glasses-no" />
+                                <Label htmlFor="glasses-no">Não</Label>
+                              </div>
+                            </RadioGroup>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Dificuldades auditivas */}
+                      <div className="space-y-3">
+                        <Label>Dificuldades auditivas?</Label>
+                        <RadioGroup 
+                          value={newPatient.hearingDifficulty || ""}
+                          onValueChange={(value) => setNewPatient({...newPatient, hearingDifficulty: value})}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="sim" id="hearing-yes" />
+                            <Label htmlFor="hearing-yes">Sim</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="não" id="hearing-no" />
+                            <Label htmlFor="hearing-no">Não</Label>
+                          </div>
+                        </RadioGroup>
+                        {newPatient.hearingDifficulty === "sim" && (
+                          <div className="ml-6 space-y-2">
+                            <Label>Usa aparelho auditivo?</Label>
+                            <RadioGroup 
+                              value={newPatient.usesHearingAid || ""}
+                              onValueChange={(value) => setNewPatient({...newPatient, usesHearingAid: value})}
+                            >
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="aid-yes" />
+                                <Label htmlFor="aid-yes">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="não" id="aid-no" />
+                                <Label htmlFor="aid-no">Não</Label>
+                              </div>
+                            </RadioGroup>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Dificuldades cognitivas */}
+                      <div className="space-y-3">
+                        <Label>Dificuldades cognitivas ou de memória?</Label>
+                        <RadioGroup 
+                          value={newPatient.cognitiveDifficulty || ""}
+                          onValueChange={(value) => setNewPatient({...newPatient, cognitiveDifficulty: value})}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="sim" id="cognitive-yes" />
+                            <Label htmlFor="cognitive-yes">Sim</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="não" id="cognitive-no" />
+                            <Label htmlFor="cognitive-no">Não</Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+
+                      {/* Habilidades digitais */}
+                      <div className="space-y-2">
+                        <Label>Habilidades digitais</Label>
+                        <Select 
+                          value={newPatient.digitalSkills || ""} 
+                          onValueChange={(value) => setNewPatient({...newPatient, digitalSkills: value})}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione o nível" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="sozinho">Usa celular sozinho</SelectItem>
+                            <SelectItem value="ajuda">Precisa de ajuda</SelectItem>
+                            <SelectItem value="nao-utiliza">Não utiliza</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Preferência de canal para lembrete */}
+                      <div className="space-y-2">
+                        <Label>Preferência de canal para lembrete</Label>
+                        <Select 
+                          value={newPatient.reminderChannel || ""} 
+                          onValueChange={(value) => setNewPatient({...newPatient, reminderChannel: value})}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione o canal" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                            <SelectItem value="sms">SMS</SelectItem>
+                            <SelectItem value="ligacao">Ligação</SelectItem>
+                            <SelectItem value="email">E-mail</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Necessita de cuidador */}
+                      <div className="space-y-3">
+                        <Label>Necessita de cuidador presente na consulta?</Label>
+                        <RadioGroup 
+                          value={newPatient.needsCaregiver || ""}
+                          onValueChange={(value) => setNewPatient({...newPatient, needsCaregiver: value})}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="sim" id="caregiver-yes" />
+                            <Label htmlFor="caregiver-yes">Sim</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="não" id="caregiver-no" />
+                            <Label htmlFor="caregiver-no">Não</Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+
+                      {/* Já realizou teleconsultas */}
+                      <div className="space-y-3">
+                        <Label>Já realizou teleconsultas antes?</Label>
+                        <RadioGroup 
+                          value={newPatient.previousTelehealth || ""}
+                          onValueChange={(value) => setNewPatient({...newPatient, previousTelehealth: value})}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="sim" id="telehealth-yes" />
+                            <Label htmlFor="telehealth-yes">Sim</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="não" id="telehealth-no" />
+                            <Label htmlFor="telehealth-no">Não</Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    </div>
+
+                    {/* Necessidades de acessibilidade */}
+                    <div className="space-y-2 mt-6">
+                      <Label>Necessidades de acessibilidade</Label>
+                      <Select 
+                        value={newPatient.accessibilityNeeds || ""} 
+                        onValueChange={(value) => setNewPatient({...newPatient, accessibilityNeeds: value})}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione as necessidades" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="nenhuma">Nenhuma necessidade especial</SelectItem>
+                          <SelectItem value="narracao">Narração em áudio</SelectItem>
+                          <SelectItem value="fonte-ampliada">Fonte ampliada</SelectItem>
+                          <SelectItem value="contraste-alto">Contraste alto</SelectItem>
+                          <SelectItem value="teclado-voz">Teclado/voz</SelectItem>
+                          <SelectItem value="multiplas">Múltiplas necessidades</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
 
                   <div className="flex gap-4">
