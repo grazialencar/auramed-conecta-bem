@@ -23,7 +23,11 @@ import {
   AlertCircle,
   Clock,
   LogOut,
-  Bell
+  Bell,
+  BarChart3,
+  PieChart,
+  MessageSquare,
+  HelpCircle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
@@ -34,6 +38,28 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent
+} from '@/components/ui/chart';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  PieChart as RechartsPieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  Area,
+  AreaChart
+} from 'recharts';
 
 // Mock data
 const mockProfessional = {
@@ -85,6 +111,51 @@ const mockStats = {
   preparationRate: 78,
   absenteeismRate: 12
 };
+
+// Mock data for dashboard charts
+const digitalSkillsData = [
+  { skill: 'Usa celular sozinho', count: 85, percentage: 54 },
+  { skill: 'Precisa de ajuda', count: 52, percentage: 33 },
+  { skill: 'Não utiliza', count: 19, percentage: 13 }
+];
+
+const accessibilityData = [
+  { type: 'Dificuldades de Visão', count: 43, total: 156 },
+  { type: 'Dificuldades Auditivas', count: 32, total: 156 },
+  { type: 'Dificuldades Cognitivas', count: 28, total: 156 }
+];
+
+const reminderChannelData = [
+  { name: 'WhatsApp', value: 78, fill: 'hsl(var(--primary))' },
+  { name: 'SMS', value: 45, fill: 'hsl(var(--primary-glow))' },
+  { name: 'E-mail', value: 23, fill: 'hsl(var(--secondary))' },
+  { name: 'Ligação', value: 10, fill: 'hsl(var(--accent))' }
+];
+
+const faqData = [
+  { question: 'Como fazer login na plataforma?', views: 234 },
+  { question: 'Como resetar senha?', views: 187 },
+  { question: 'Como agendar consulta?', views: 156 },
+  { question: 'Problemas técnicos', views: 134 },
+  { question: 'Como cancelar consulta?', views: 98 }
+];
+
+const chatbotUsageData = [
+  { month: 'Jan', usage: 120 },
+  { month: 'Fev', usage: 156 },
+  { month: 'Mar', usage: 189 },
+  { month: 'Abr', usage: 234 },
+  { month: 'Mai', usage: 278 },
+  { month: 'Jun', usage: 312 }
+];
+
+const unansweredQuestions = [
+  'Como alterar dados pessoais no perfil?',
+  'Posso remarcar consulta no mesmo dia?',
+  'Como acessar histórico de exames?',
+  'Existe limite de reagendamento?',
+  'Como funciona o pagamento online?'
+];
 
 export const DashboardProfissional: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -611,75 +682,197 @@ export const DashboardProfissional: React.FC = () => {
 
           {/* Relatórios */}
           <TabsContent value="reports" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5" />
-                    Estatísticas do Mês
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span>Consultas Realizadas</span>
-                      <span className="font-bold">89</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Taxa de Comparecimento</span>
-                      <span className="font-bold text-success">88%</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Pacientes Preparados</span>
-                      <span className="font-bold text-success">78%</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Média de Tempo por Consulta</span>
-                      <span className="font-bold">32 min</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Exportar Relatórios</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Button className="w-full" variant="outline">
-                    <Download className="h-4 w-4 mr-2" />
-                    Relatório de Absenteísmo (PDF)
-                  </Button>
-                  <Button className="w-full" variant="outline">
-                    <Download className="h-4 w-4 mr-2" />
-                    Lista de Pacientes (Excel)
-                  </Button>
-                  <Button className="w-full" variant="outline">
-                    <Download className="h-4 w-4 mr-2" />
-                    Estatísticas Mensais (PDF)
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-
+            {/* Dashboard 1: Prontidão e Acessibilidade do Paciente */}
             <Card>
               <CardHeader>
-                <CardTitle>Análise de Preparação dos Pacientes</CardTitle>
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <BarChart3 className="h-6 w-6" />
+                  Prontidão e Acessibilidade do Paciente
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="text-center p-4 bg-success/10 rounded-lg">
-                    <div className="text-2xl font-bold text-success">78%</div>
-                    <div className="text-sm text-muted-foreground">Preparados</div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Habilidades Digitais */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Habilidades Digitais dos Pacientes</h3>
+                    <ChartContainer
+                      config={{
+                        count: {
+                          label: "Número de Pacientes",
+                          color: "hsl(var(--primary))",
+                        },
+                      }}
+                      className="h-[300px]"
+                    >
+                      <BarChart data={digitalSkillsData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="skill" 
+                          tick={{ fontSize: 12 }}
+                          interval={0}
+                          angle={-45}
+                          textAnchor="end"
+                          height={80}
+                        />
+                        <YAxis />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Bar dataKey="count" fill="hsl(var(--primary))" radius={4} />
+                      </BarChart>
+                    </ChartContainer>
                   </div>
-                  <div className="text-center p-4 bg-warning/10 rounded-lg">
-                    <div className="text-2xl font-bold text-warning">15%</div>
-                    <div className="text-sm text-muted-foreground">Em Preparação</div>
+
+                  {/* Canal de Lembrete */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Canal de Lembrete Preferido</h3>
+                    <ChartContainer
+                      config={{
+                        whatsapp: { label: "WhatsApp", color: "hsl(var(--primary))" },
+                        sms: { label: "SMS", color: "hsl(var(--primary-glow))" },
+                        email: { label: "E-mail", color: "hsl(var(--secondary))" },
+                        call: { label: "Ligação", color: "hsl(var(--accent))" },
+                      }}
+                      className="h-[300px]"
+                    >
+                       <RechartsPieChart>
+                         <Pie
+                           data={reminderChannelData}
+                           cx="50%"
+                           cy="50%"
+                           outerRadius={80}
+                           dataKey="value"
+                           label={({ name, value }) => `${name}: ${value}`}
+                         >
+                           {reminderChannelData.map((entry, index) => (
+                             <Cell key={`cell-${index}`} fill={entry.fill} />
+                           ))}
+                         </Pie>
+                         <ChartTooltip content={<ChartTooltipContent />} />
+                       </RechartsPieChart>
+                    </ChartContainer>
                   </div>
-                  <div className="text-center p-4 bg-destructive/10 rounded-lg">
-                    <div className="text-2xl font-bold text-destructive">7%</div>
-                    <div className="text-sm text-muted-foreground">Não Preparados</div>
+                </div>
+
+                {/* Dificuldades de Acessibilidade */}
+                <div className="mt-6 space-y-4">
+                  <h3 className="text-lg font-semibold">Dificuldades de Acessibilidade</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {accessibilityData.map((item, index) => {
+                      const percentage = Math.round((item.count / item.total) * 100);
+                      return (
+                        <div key={index} className="p-4 border rounded-lg">
+                          <div className="text-center space-y-2">
+                            <h4 className="font-medium text-sm">{item.type}</h4>
+                            <div className="text-2xl font-bold text-primary">{percentage}%</div>
+                            <div className="text-sm text-muted-foreground">
+                              {item.count} de {item.total} pacientes
+                            </div>
+                            <div className="w-full bg-secondary rounded-full h-2">
+                              <div 
+                                className="bg-primary h-2 rounded-full transition-all" 
+                                style={{ width: `${percentage}%` }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Dashboard 2: Suporte e Engajamento */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <MessageSquare className="h-6 w-6" />
+                  Suporte e Engajamento
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* FAQ Mais Acessados */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">FAQ Mais Acessados</h3>
+                    <ChartContainer
+                      config={{
+                        views: {
+                          label: "Visualizações",
+                          color: "hsl(var(--secondary))",
+                        },
+                      }}
+                      className="h-[300px]"
+                    >
+                      <BarChart data={faqData} layout="horizontal">
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis 
+                          dataKey="question" 
+                          type="category" 
+                          tick={{ fontSize: 10 }}
+                          width={120}
+                        />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Bar dataKey="views" fill="hsl(var(--secondary))" radius={4} />
+                      </BarChart>
+                    </ChartContainer>
+                  </div>
+
+                  {/* Uso do Chatbot */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Tendências de Uso do Chatbot</h3>
+                    <ChartContainer
+                      config={{
+                        usage: {
+                          label: "Interações",
+                          color: "hsl(var(--accent))",
+                        },
+                      }}
+                      className="h-[300px]"
+                    >
+                      <LineChart data={chatbotUsageData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Line 
+                          type="monotone" 
+                          dataKey="usage" 
+                          stroke="hsl(var(--accent))" 
+                          strokeWidth={3}
+                          dot={{ fill: "hsl(var(--accent))", strokeWidth: 2, r: 4 }}
+                        />
+                      </LineChart>
+                    </ChartContainer>
+                  </div>
+                </div>
+
+                {/* Perguntas Não Respondidas */}
+                <div className="mt-6 space-y-4">
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <HelpCircle className="h-5 w-5" />
+                    Principais Perguntas Não Respondidas
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {unansweredQuestions.map((question, index) => (
+                      <div key={index} className="p-3 bg-muted rounded-lg flex items-center gap-3">
+                        <div className="w-2 h-2 bg-warning rounded-full flex-shrink-0" />
+                        <span className="text-sm">{question}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Botões de Exportação */}
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Button variant="outline" size="sm">
+                    <Download className="h-4 w-4 mr-2" />
+                    Exportar Relatório de Acessibilidade
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Download className="h-4 w-4 mr-2" />
+                    Exportar Dados de Engajamento
+                  </Button>
                 </div>
               </CardContent>
             </Card>
